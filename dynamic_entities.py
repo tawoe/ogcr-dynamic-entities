@@ -40,7 +40,7 @@ def create_system_dynamic_entity(entity_definition, token=None):
 # Example 1: Customer Preferences Entity
 project_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"Project": {
+	"My_Project": {
 		"description": "a carbon credit project",
 		"required": [
 			"project_owner"
@@ -57,7 +57,7 @@ project_entity = {
 
 parcel_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"Parcel": {
+	"My_Parcel": {
 				"description": "a piece of land",
 				"required": [
 					"project_id",
@@ -86,7 +86,7 @@ parcel_entity = {
 
 parcel_ownership_verification_entity = {
 	"hasPersonalEntity": False,
-	"Parcel_Ownership_Verification": {
+	"My_Parcel_Ownership_Verification": {
 				"description": "Verification of Landownership",
 				"required": [
 					"parcel_id"
@@ -118,7 +118,7 @@ parcel_ownership_verification_entity = {
 
 parcel_verification_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"Project_Parcel_Verification": {
+	"My_Project_Parcel_Verification": {
 		"description": "Verification of Project Claim Estimation",
 		"required": [
 			"parcel_id",
@@ -155,7 +155,7 @@ parcel_verification_entity = {
 
 project_verification_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"Project_Verification": {
+	"My_Project_Verification": {
 		"description": "Verification of Project",
 		"required": [
 			"project_id"
@@ -181,7 +181,7 @@ project_verification_entity = {
 
 parcel_monitoring_period_verification = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"Parcel_Monitoring_Period_Verification": {
+	"My_Parcel_Monitoring_Period_Verification": {
 		"description": "Verification of Project Claim",
 		"required": [
 			"parcel_id",
@@ -218,7 +218,7 @@ parcel_monitoring_period_verification = {
 
 project_monitoring_period_verification = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"Project_Period_Verification": {
+	"My_Project_Period_Verification": {
 		"description": "Verification of Project",
 		"required": [
 			"project_id"
