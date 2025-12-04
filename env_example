@@ -1,0 +1,5 @@
+OBP_HOSTNAME=http://localhost:8080
+OBP_USERNAME=myusername
+OBP_PASSWORD=mysecretpassword
+OBP_CONSUMER_KEY=myconsumerkey
+OBP_LOG_LEVEL=INFO
