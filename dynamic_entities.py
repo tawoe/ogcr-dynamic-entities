@@ -60,12 +60,13 @@ parcel_entity = {
 	"Parcel": {
 				"description": "a piece of land",
 				"required": [
+					"project_id",
 					"parcel_owner",
 					"geo_data"
 				],
 				"properties": {
-					"project_id_": {
-						"type": "reference:Project",
+					"project_id": {
+						"type": "string",
 						"example": "1234567",
 						"description": "ID of the project this parcel belongs to"
 					},
@@ -88,11 +89,11 @@ parcel_ownership_verification_entity = {
 	"Parcel_Ownership_Verification": {
 				"description": "Verification of Landownership",
 				"required": [
-					"parcel_id_"
+					"parcel_id"
 				],
 				"properties": {
-					"parcel_id_": {
-						"type": "reference:Parcel",
+					"parcel_id": {
+						"type": "string",
 						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 						"description": "(uu)id of the parcel that gets verified"
 					},
@@ -120,17 +121,17 @@ parcel_verification_entity = {
 	"Project_Parcel_Verification": {
 		"description": "Verification of Project Claim Estimation",
 		"required": [
-			"parcel_id_",
-			"project_id_"
+			"parcel_id",
+			"project_id"
 		],
 		"properties": {
-			"parcel_id_": {
-				"type": "reference:Parcel",
+			"parcel_id": {
+				"type": "string",
 				"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 				"description": "(uu)id of the parcel that gets verified"
 			},
 			"project_id_": {
-						"type": "reference:Project",
+						"type": "string",
 						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 						"description": "ID of the project this parcel belongs to"
 			},
@@ -157,11 +158,11 @@ project_verification_entity = {
 	"Project_Verification": {
 		"description": "Verification of Project",
 		"required": [
-			"project_id_"
+			"project_id"
 		],
 		"properties": {
-			"project_id_": {
-						"type": "reference:Project",
+			"project_id": {
+						"type": "string",
 						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 						"description": "ID of the project verified"
 			},
@@ -183,17 +184,17 @@ parcel_monitoring_period_verification = {
 	"Parcel_Monitoring_Period_Verification": {
 		"description": "Verification of Project Claim",
 		"required": [
-			"parcel_id_",
-			"project_id_"
+			"parcel_id",
+			"project_id"
 		],
 		"properties": {
-			"parcel_id_": {
-				"type": "reference:Parcel",
+			"parcel_id": {
+				"type": "string",
 				"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 				"description": "(uu)id of the parcel that gets verified"
 			},
-			"project_id_": {
-						"type": "reference:Project",
+			"project_id": {
+						"type": "string",
 						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 						"description": "ID of the project this parcel belongs to"
 			},
@@ -220,11 +221,11 @@ project_monitoring_period_verification = {
 	"Project_Period_Verification": {
 		"description": "Verification of Project",
 		"required": [
-			"project_id_"
+			"project_id"
 		],
 		"properties": {
-			"project_id_": {
-						"type": "reference:Project",
+			"project_id": {
+						"type": "string",
 						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 						"description": "ID of the project verified"
 			},
