@@ -3,3 +3,5 @@ OBP_USERNAME=myusername
 OBP_PASSWORD=mysecretpassword
 OBP_CONSUMER_KEY=myconsumerkey
 OBP_LOG_LEVEL=INFO
+# Optional parameters
+OBP_ENTITY_PREFIX=""

@@ -1,9 +1,12 @@
 import requests
 from obp_client import token, obp_host
+from dotenv import load_dotenv
+import os
 # Configuration
 BASE_URL = obp_host  # Replace with your OBP instance URL
 DIRECTLOGIN_TOKEN = token  # Optional: Replace with your DirectLogin token
-
+load_dotenv()
+PREFIX = os.getenv('OBP_ENTITY_PREFIX', '')
 
 def create_system_dynamic_entity(entity_definition, token=None):
 	"""
@@ -40,7 +43,7 @@ def create_system_dynamic_entity(entity_definition, token=None):
 # Example 1: Customer Preferences Entity
 project_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"OGCR_Project": {
+	f"{PREFIX}Project": {
 		"description": "a carbon credit project",
 		"required": [
 			"project_owner"
@@ -57,7 +60,7 @@ project_entity = {
 
 parcel_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"OGCR_Parcel": {
+	f"{PREFIX}Parcel": {
 				"description": "a piece of land",
 				"required": [
 					"project_id",
@@ -86,7 +89,7 @@ parcel_entity = {
 
 parcel_ownership_verification_entity = {
 	"hasPersonalEntity": False,
-	"OGCR_Parcel_Ownership_Verification": {
+	f"{PREFIX}Parcel_Ownership_Verification": {
 				"description": "Verification of Landownership",
 				"required": [
 					"parcel_id"
@@ -118,7 +121,7 @@ parcel_ownership_verification_entity = {
 
 parcel_verification_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"OGCR_Project_Parcel_Verification": {
+	f"{PREFIX}Project_Parcel_Verification": {
 		"description": "Verification of Project Claim Estimation",
 		"required": [
 			"parcel_id",
@@ -155,7 +158,7 @@ parcel_verification_entity = {
 
 project_verification_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"OGCR_Project_Verification": {
+	f"{PREFIX}Project_Verification": {
 		"description": "Verification of Project",
 		"required": [
 			"project_id"
@@ -181,7 +184,7 @@ project_verification_entity = {
 
 parcel_monitoring_period_verification = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"OGCR_Parcel_Monitoring_Period_Verification": {
+	f"{PREFIX}Parcel_Monitoring_Period_Verification": {
 		"description": "Verification of Project Claim",
 		"required": [
 			"parcel_id",
@@ -218,7 +221,7 @@ parcel_monitoring_period_verification = {
 
 project_monitoring_period_verification = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	"OGCR_Project_Period_Verification": {
+	f"{PREFIX}Project_Period_Verification": {
 		"description": "Verification of Project",
 		"required": [
 			"project_id"
@@ -242,16 +245,18 @@ project_monitoring_period_verification = {
 		}
 	}}
 
-for entity in [
-	project_entity,
-	parcel_entity,
-	parcel_ownership_verification_entity,
-	parcel_verification_entity,
-	project_verification_entity,
-	parcel_monitoring_period_verification,
-	project_monitoring_period_verification]:
-	try:
-		response = create_system_dynamic_entity(entity, DIRECTLOGIN_TOKEN)
-		print(f"Created entity: {response}")
-	except Exception as e:
-		print(f"Failed to create entity: {e}")
+
+def create_all_entities():
+	for entity in [
+		project_entity,
+		parcel_entity,
+		parcel_ownership_verification_entity,
+		parcel_verification_entity,
+		project_verification_entity,
+		parcel_monitoring_period_verification,
+		project_monitoring_period_verification]:
+		try:
+			response = create_system_dynamic_entity(entity, DIRECTLOGIN_TOKEN)
+			print(f"Created entity: {response}")
+		except Exception as e:
+			print(f"Failed to create entity: {e}")
