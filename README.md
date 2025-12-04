@@ -4,6 +4,10 @@ Dynamic Entities — Tools and Scripts
 Prerequisites
 -------------
 - Python 3.8+ (use your virtualenv of choice)
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
 - Dependencies installed:
 
 ```bash
