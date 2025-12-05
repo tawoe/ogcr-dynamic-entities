@@ -105,7 +105,7 @@ parcel_entity = {
 
 parcel_ownership_verification_entity = {
 	"hasPersonalEntity": False,
-	ENTITY_PARCEL_OWN_VERIFY: {
+	ENTITY_PARCEL_OWNERSHIP_VERIFICATION: {
 				"description": "Verification of Landownership",
 				"required": [
 					"parcel_id"

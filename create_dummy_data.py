@@ -6,8 +6,8 @@ import os
 from dynamic_entities import (
     ENTITY_PROJECT,
     ENTITY_PARCEL,
-    ENTITY_PARCEL_OWN_VERIFY,
-    ENTITY_PROJ_PARCEL_VERIFY,
+    ENTITY_PARCEL_OWNERSHIP_VERIFICATION,
+    ENTITY_PROJECT_PARCEL_VERIFICATION,
     ENTITY_PROJECT_VERIFICATION,
     ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION,
     ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION
@@ -208,7 +208,7 @@ def main():
 
         try:
             response = create_dynamic_entity_object(
-                ENTITY_PARCEL_OWN_VERIFY,
+                ENTITY_PARCEL_OWNERSHIP_VERIFICATION,
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )
@@ -268,7 +268,7 @@ def main():
 
         try:
             response = create_dynamic_entity_object(
-                ENTITY_PROJ_PARCEL_VERIFY,
+                ENTITY_PROJECT_PARCEL_VERIFICATION,
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )
