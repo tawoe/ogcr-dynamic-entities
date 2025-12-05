@@ -8,9 +8,9 @@ from dynamic_entities import (
     ENTITY_PARCEL,
     ENTITY_PARCEL_OWN_VERIFY,
     ENTITY_PROJ_PARCEL_VERIFY,
-    ENTITY_PROJ_VERIFY,
-    ENTITY_PARCEL_MON_PER_VERIFY,
-    ENTITY_PROJ_PER_VERIFY
+    ENTITY_PROJECT_VERIFICATION,
+    ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION,
+    ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION
 )
 
 # Configure logging with better formatting
@@ -237,7 +237,7 @@ def main():
 
         try:
             response = create_dynamic_entity_object(
-                ENTITY_PROJ_VERIFY,
+                ENTITY_PROJECT_VERIFICATION,
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )
@@ -299,7 +299,7 @@ def main():
 
         try:
             response = create_dynamic_entity_object(
-                ENTITY_PARCEL_MON_PER_VERIFY,
+                ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION,
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )
@@ -328,7 +328,7 @@ def main():
 
         try:
             response = create_dynamic_entity_object(
-                ENTITY_PROJ_PER_VERIFY,
+                ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION,
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )

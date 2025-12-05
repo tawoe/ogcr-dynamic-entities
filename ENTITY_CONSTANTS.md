@@ -16,9 +16,9 @@ from dynamic_entities import (
     ENTITY_PARCEL,
     ENTITY_PARCEL_OWN_VERIFY,
     ENTITY_PROJ_PARCEL_VERIFY,
-    ENTITY_PROJ_VERIFY,
-    ENTITY_PARCEL_MON_PER_VERIFY,
-    ENTITY_PROJ_PER_VERIFY
+    ENTITY_PROJECT_VERIFICATION,
+    ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION,
+    ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION
 )
 ```
 
@@ -30,9 +30,9 @@ from dynamic_entities import (
 | `ENTITY_PARCEL` | `OGCR2Parcel` | Land parcel |
 | `ENTITY_PARCEL_OWN_VERIFY` | `OGCR2Parcel_Own_Verify` | Parcel ownership verification |
 | `ENTITY_PROJ_PARCEL_VERIFY` | `OGCR2Proj_Parcel_Verify` | Project-parcel verification (baseline) |
-| `ENTITY_PROJ_VERIFY` | `OGCR2Proj_Verify` | Project verification |
-| `ENTITY_PARCEL_MON_PER_VERIFY` | `OGCR2Parcel_Mon_Per_Verify` | Parcel monitoring period verification |
-| `ENTITY_PROJ_PER_VERIFY` | `OGCR2Proj_Per_Verify` | Project period verification |
+| `ENTITY_PROJECT_VERIFICATION` | `OGCR2Proj_Verify` | Project verification |
+| `ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION` | `OGCR2Parcel_Mon_Per_Verify` | Parcel monitoring period verification |
+| `ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION` | `OGCR2Proj_Per_Verify` | Project period verification |
 
 **Note:** The prefix is configurable via the `OBP_ENTITY_PREFIX` environment variable in `.env`
 
@@ -64,9 +64,9 @@ my_dynamic_entities_names = [
     ENTITY_PARCEL,
     ENTITY_PARCEL_OWN_VERIFY,
     ENTITY_PROJ_PARCEL_VERIFY,
-    ENTITY_PROJ_VERIFY,
-    ENTITY_PARCEL_MON_PER_VERIFY,
-    ENTITY_PROJ_PER_VERIFY
+    ENTITY_PROJECT_VERIFICATION,
+    ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION,
+    ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION
 ]
 ```
 
@@ -111,9 +111,9 @@ Project (ENTITY_PROJECT)
 ├── Parcel (ENTITY_PARCEL)
 │   ├── Parcel Ownership Verification (ENTITY_PARCEL_OWN_VERIFY)
 │   ├── Project-Parcel Verification (ENTITY_PROJ_PARCEL_VERIFY)
-│   └── Parcel Monitoring Period Verification (ENTITY_PARCEL_MON_PER_VERIFY)
-├── Project Verification (ENTITY_PROJ_VERIFY)
-└── Project Period Verification (ENTITY_PROJ_PER_VERIFY)
+│   └── Parcel Monitoring Period Verification (ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION)
+├── Project Verification (ENTITY_PROJECT_VERIFICATION)
+└── Project Period Verification (ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION)
 ```
 
 ### Foreign Key Relationships
@@ -122,7 +122,7 @@ Project (ENTITY_PROJECT)
 - `ENTITY_PARCEL_OWN_VERIFY.parcel_id` → `ENTITY_PARCEL`
 - `ENTITY_PROJ_PARCEL_VERIFY.parcel_id` → `ENTITY_PARCEL`
 - `ENTITY_PROJ_PARCEL_VERIFY.project_id` → `ENTITY_PROJECT`
-- `ENTITY_PROJ_VERIFY.project_id` → `ENTITY_PROJECT`
-- `ENTITY_PARCEL_MON_PER_VERIFY.parcel_id` → `ENTITY_PARCEL`
-- `ENTITY_PARCEL_MON_PER_VERIFY.project_id` → `ENTITY_PROJECT`
-- `ENTITY_PROJ_PER_VERIFY.project_id` → `ENTITY_PROJECT`
+- `ENTITY_PROJECT_VERIFICATION.project_id` → `ENTITY_PROJECT`
+- `ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION.parcel_id` → `ENTITY_PARCEL`
+- `ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION.project_id` → `ENTITY_PROJECT`
+- `ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION.project_id` → `ENTITY_PROJECT`
