@@ -1,5 +1,9 @@
 import requests
+import logging
 from obp_client import token, obp_host
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 # Configuration
 BASE_URL = obp_host  # Replace with your OBP instance URL
@@ -32,9 +36,9 @@ def get_all_system_dynamic_entities(token=None):
 		response.raise_for_status()
 		return response.json()
 	except requests.exceptions.RequestException as e:
-		print(f"Error getting system dynamic entity: {e}")
+		logger.error(f"Error getting system dynamic entity: {e}")
 		if hasattr(e.response, 'text'):
-			print(f"Response: {e.response.text}")
+			logger.error(f"Response: {e.response.text}")
 		raise
 
 def get_all_objects_for_system_dynamic_entity(entity_name, token=None):
@@ -62,9 +66,9 @@ def get_all_objects_for_system_dynamic_entity(entity_name, token=None):
 		response.raise_for_status()
 		return response.json()
 	except requests.exceptions.RequestException as e:
-		print(f"Error getting system dynamic entity: {e}")
+		logger.error(f"Error getting system dynamic entity: {e}")
 		if hasattr(e.response, 'text'):
-			print(f"Response: {e.response.text}")
+			logger.error(f"Response: {e.response.text}")
 		raise
 
 def delete_object_for_system_dynamic_entity(entity_name, object_id, token=None):
@@ -84,9 +88,9 @@ def delete_object_for_system_dynamic_entity(entity_name, object_id, token=None):
 		response.raise_for_status()
 		return response.json()
 	except requests.exceptions.RequestException as e:
-		print(f"Error deleting system dynamic entity object: {e}")
+		logger.error(f"Error deleting system dynamic entity object: {e}")
 		if hasattr(e.response, 'text'):
-			print(f"Response: {e.response.text}")
+			logger.error(f"Response: {e.response.text}")
 		raise
 
 def delete_system_dynamic_entity(entity_id, token=None):
@@ -106,8 +110,8 @@ def delete_system_dynamic_entity(entity_id, token=None):
 		response.raise_for_status()
 		return response.json()
 	except requests.exceptions.RequestException as e:
-		print(f"Error deleting system dynamic entity: {e}")
+		logger.error(f"Error deleting system dynamic entity: {e}")
 		if hasattr(e.response, 'text'):
-			print(f"Response: {e.response.text}")
+			logger.error(f"Response: {e.response.text}")
 		raise
 

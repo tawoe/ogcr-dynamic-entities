@@ -1,7 +1,11 @@
 import requests
+import logging
 from obp_client import token, obp_host
 from dotenv import load_dotenv
 import os
+
+# Configure logging
+logger = logging.getLogger(__name__)
 # Configuration
 BASE_URL = obp_host  # Replace with your OBP instance URL
 DIRECTLOGIN_TOKEN = token  # Optional: Replace with your DirectLogin token
@@ -34,9 +38,9 @@ def create_system_dynamic_entity(entity_definition, token=None):
 		response.raise_for_status()
 		return response.json()
 	except requests.exceptions.RequestException as e:
-		print(f"Error creating system dynamic entity: {e}")
+		logger.error(f"Error creating system dynamic entity: {e}")
 		if hasattr(e.response, 'text'):
-			print(f"Response: {e.response.text}")
+			logger.error(f"Response: {e.response.text}")
 		raise
 
 
@@ -247,16 +251,29 @@ project_monitoring_period_verification = {
 
 
 def create_all_entities():
-	for entity in [
-		project_entity,
-		parcel_entity,
-		parcel_ownership_verification_entity,
-		parcel_verification_entity,
-		project_verification_entity,
-		parcel_monitoring_period_verification,
-		project_monitoring_period_verification]:
+	entities_data = [
+		("Project", project_entity),
+		("Parcel", parcel_entity),
+		("Parcel_Ownership_Verification", parcel_ownership_verification_entity),
+		("Project_Parcel_Verification", parcel_verification_entity),
+		("Project_Verification", project_verification_entity),
+		("Parcel_Monitoring_Period_Verification", parcel_monitoring_period_verification),
+		("Project_Period_Verification", project_monitoring_period_verification)
+	]
+	
+	created_count = 0
+	failed_count = 0
+	
+	for idx, (name, entity) in enumerate(entities_data, 1):
+		full_name = f"{PREFIX}{name}"
 		try:
 			response = create_system_dynamic_entity(entity, DIRECTLOGIN_TOKEN)
-			print(f"Created entity: {response}")
+			entity_id = response.get('dynamicEntityId', 'N/A')
+			logger.info(f"  ✓ [{idx}/{len(entities_data)}] Created entity: {full_name} (ID: {entity_id})")
+			created_count += 1
 		except Exception as e:
-			print(f"Failed to create entity: {e}")
+			logger.error(f"  ✗ [{idx}/{len(entities_data)}] Failed to create entity {full_name}: {e}")
+			failed_count += 1
+	
+	logger.info("")
+	logger.info(f"Entity Creation Summary: {created_count} created, {failed_count} failed")
