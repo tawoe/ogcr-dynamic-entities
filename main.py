@@ -26,11 +26,11 @@ DIRECTLOGIN_TOKEN = token
 my_dynamic_entities_names = [
 	f"{PREFIX}Project",
 	f"{PREFIX}Parcel",
-	f"{PREFIX}Parcel_Ownership_Verification",
-	f"{PREFIX}Project_Parcel_Verification",
-	f"{PREFIX}Project_Verification",
-	f"{PREFIX}Parcel_Monitoring_Period_Verification",
-	f"{PREFIX}Project_Period_Verification"
+	f"{PREFIX}Parcel_Own_Verify",
+	f"{PREFIX}Proj_Parcel_Verify",
+	f"{PREFIX}Proj_Verify",
+	f"{PREFIX}Parcel_Mon_Per_Verify",
+	f"{PREFIX}Proj_Per_Verify"
 ]
 
 

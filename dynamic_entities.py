@@ -1,5 +1,6 @@
 import requests
 import logging
+import json
 from obp_client import token, obp_host
 from dotenv import load_dotenv
 import os
@@ -39,6 +40,8 @@ def create_system_dynamic_entity(entity_definition, token=None):
 		return response.json()
 	except requests.exceptions.RequestException as e:
 		logger.error(f"Error creating system dynamic entity: {e}")
+		logger.error(f"Request URL: {url}")
+		logger.error(f"Request body:\n{json.dumps(entity_definition, indent=2)}")
 		if hasattr(e.response, 'text'):
 			logger.error(f"Response: {e.response.text}")
 		raise
@@ -93,7 +96,7 @@ parcel_entity = {
 
 parcel_ownership_verification_entity = {
 	"hasPersonalEntity": False,
-	f"{PREFIX}Parcel_Ownership_Verification": {
+	f"{PREFIX}Parcel_Own_Verify": {
 				"description": "Verification of Landownership",
 				"required": [
 					"parcel_id"
@@ -125,7 +128,7 @@ parcel_ownership_verification_entity = {
 
 parcel_verification_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Project_Parcel_Verification": {
+	f"{PREFIX}Proj_Parcel_Verify": {
 		"description": "Verification of Project Claim Estimation",
 		"required": [
 			"parcel_id",
@@ -137,7 +140,7 @@ parcel_verification_entity = {
 				"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 				"description": "(uu)id of the parcel that gets verified"
 			},
-			"project_id_": {
+			"project_id": {
 						"type": "string",
 						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 						"description": "ID of the project this parcel belongs to"
@@ -162,7 +165,7 @@ parcel_verification_entity = {
 
 project_verification_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Project_Verification": {
+	f"{PREFIX}Proj_Verify": {
 		"description": "Verification of Project",
 		"required": [
 			"project_id"
@@ -188,7 +191,7 @@ project_verification_entity = {
 
 parcel_monitoring_period_verification = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Parcel_Monitoring_Period_Verification": {
+	f"{PREFIX}Parcel_Mon_Per_Verify": {
 		"description": "Verification of Project Claim",
 		"required": [
 			"parcel_id",
@@ -225,7 +228,7 @@ parcel_monitoring_period_verification = {
 
 project_monitoring_period_verification = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Project_Period_Verification": {
+	f"{PREFIX}Proj_Per_Verify": {
 		"description": "Verification of Project",
 		"required": [
 			"project_id"
@@ -254,11 +257,11 @@ def create_all_entities():
 	entities_data = [
 		("Project", project_entity),
 		("Parcel", parcel_entity),
-		("Parcel_Ownership_Verification", parcel_ownership_verification_entity),
-		("Project_Parcel_Verification", parcel_verification_entity),
-		("Project_Verification", project_verification_entity),
-		("Parcel_Monitoring_Period_Verification", parcel_monitoring_period_verification),
-		("Project_Period_Verification", project_monitoring_period_verification)
+		("Parcel_Own_Verify", parcel_ownership_verification_entity),
+		("Proj_Parcel_Verify", parcel_verification_entity),
+		("Proj_Verify", project_verification_entity),
+		("Parcel_Mon_Per_Verify", parcel_monitoring_period_verification),
+		("Proj_Per_Verify", project_monitoring_period_verification)
 	]
 	
 	created_count = 0
@@ -272,7 +275,9 @@ def create_all_entities():
 			logger.info(f"  ✓ [{idx}/{len(entities_data)}] Created entity: {full_name} (ID: {entity_id})")
 			created_count += 1
 		except Exception as e:
-			logger.error(f"  ✗ [{idx}/{len(entities_data)}] Failed to create entity {full_name}: {e}")
+			logger.error(f"  ✗ [{idx}/{len(entities_data)}] Failed to create entity {full_name}")
+			logger.error(f"      Error details: {e}")
+			# The detailed request is already logged by create_system_dynamic_entity()
 			failed_count += 1
 	
 	logger.info("")
