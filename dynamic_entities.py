@@ -13,6 +13,15 @@ DIRECTLOGIN_TOKEN = token  # Optional: Replace with your DirectLogin token
 load_dotenv()
 PREFIX = os.getenv('OBP_ENTITY_PREFIX', '')
 
+# Entity name constants
+ENTITY_PROJECT = f"{PREFIX}Project"
+ENTITY_PARCEL = f"{PREFIX}Parcel"
+ENTITY_PARCEL_OWN_VERIFY = f"{PREFIX}Parcel_Own_Verify"
+ENTITY_PROJ_PARCEL_VERIFY = f"{PREFIX}Proj_Parcel_Verify"
+ENTITY_PROJ_VERIFY = f"{PREFIX}Proj_Verify"
+ENTITY_PARCEL_MON_PER_VERIFY = f"{PREFIX}Parcel_Mon_Per_Verify"
+ENTITY_PROJ_PER_VERIFY = f"{PREFIX}Proj_Per_Verify"
+
 def create_system_dynamic_entity(entity_definition, token=None):
 	"""
 	Create a system-level dynamic entity in OBP.
@@ -50,7 +59,7 @@ def create_system_dynamic_entity(entity_definition, token=None):
 # Example 1: Customer Preferences Entity
 project_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Project": {
+	ENTITY_PROJECT: {
 		"description": "a carbon credit project",
 		"required": [
 			"project_owner"
@@ -67,7 +76,7 @@ project_entity = {
 
 parcel_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Parcel": {
+	ENTITY_PARCEL: {
 				"description": "a piece of land",
 				"required": [
 					"project_id",
@@ -96,7 +105,7 @@ parcel_entity = {
 
 parcel_ownership_verification_entity = {
 	"hasPersonalEntity": False,
-	f"{PREFIX}Parcel_Own_Verify": {
+	ENTITY_PARCEL_OWN_VERIFY: {
 				"description": "Verification of Landownership",
 				"required": [
 					"parcel_id"
@@ -128,7 +137,7 @@ parcel_ownership_verification_entity = {
 
 parcel_verification_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Proj_Parcel_Verify": {
+	ENTITY_PROJ_PARCEL_VERIFY: {
 		"description": "Verification of Project Claim Estimation",
 		"required": [
 			"parcel_id",
@@ -165,7 +174,7 @@ parcel_verification_entity = {
 
 project_verification_entity = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Proj_Verify": {
+	ENTITY_PROJ_VERIFY: {
 		"description": "Verification of Project",
 		"required": [
 			"project_id"
@@ -191,7 +200,7 @@ project_verification_entity = {
 
 parcel_monitoring_period_verification = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Parcel_Mon_Per_Verify": {
+	ENTITY_PARCEL_MON_PER_VERIFY: {
 		"description": "Verification of Project Claim",
 		"required": [
 			"parcel_id",
@@ -228,7 +237,7 @@ parcel_monitoring_period_verification = {
 
 project_monitoring_period_verification = {
 	"hasPersonalEntity": False,  # Creates both regular and 'my' endpoints
-	f"{PREFIX}Proj_Per_Verify": {
+	ENTITY_PROJ_PER_VERIFY: {
 		"description": "Verification of Project",
 		"required": [
 			"project_id"

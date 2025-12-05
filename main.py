@@ -9,7 +9,17 @@ from get_and_delete_dynamic_entities import (
 	get_all_objects_for_system_dynamic_entity,
 	delete_object_for_system_dynamic_entity,
 	delete_system_dynamic_entity)
-from dynamic_entities import create_all_entities, PREFIX
+from dynamic_entities import (
+	create_all_entities,
+	PREFIX,
+	ENTITY_PROJECT,
+	ENTITY_PARCEL,
+	ENTITY_PARCEL_OWN_VERIFY,
+	ENTITY_PROJ_PARCEL_VERIFY,
+	ENTITY_PROJ_VERIFY,
+	ENTITY_PARCEL_MON_PER_VERIFY,
+	ENTITY_PROJ_PER_VERIFY
+)
 
 # Configure logging with better formatting
 logging.basicConfig(
@@ -24,13 +34,13 @@ BASE_URL = obp_host
 DIRECTLOGIN_TOKEN = token
 
 my_dynamic_entities_names = [
-	f"{PREFIX}Project",
-	f"{PREFIX}Parcel",
-	f"{PREFIX}Parcel_Own_Verify",
-	f"{PREFIX}Proj_Parcel_Verify",
-	f"{PREFIX}Proj_Verify",
-	f"{PREFIX}Parcel_Mon_Per_Verify",
-	f"{PREFIX}Proj_Per_Verify"
+	ENTITY_PROJECT,
+	ENTITY_PARCEL,
+	ENTITY_PARCEL_OWN_VERIFY,
+	ENTITY_PROJ_PARCEL_VERIFY,
+	ENTITY_PROJ_VERIFY,
+	ENTITY_PARCEL_MON_PER_VERIFY,
+	ENTITY_PROJ_PER_VERIFY
 ]
 
 
