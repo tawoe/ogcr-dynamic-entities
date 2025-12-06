@@ -1,6 +1,7 @@
 import logging
 import random
 import requests
+import time
 from dotenv import load_dotenv
 from obp_client import token, obp_host
 from dynamic_entities import (
@@ -67,6 +68,39 @@ def create_dynamic_entity_object(entity_name, data, token=None):
         raise
 
 
+def get_dynamic_entity_object(entity_name, object_id, token=None):
+    """
+    Get a specific object from a dynamic entity.
+
+    Args:
+        entity_name (str): The name of the dynamic entity
+        object_id (str): The ID of the object to fetch
+        token (str, optional): DirectLogin authentication token
+
+    Returns:
+        dict: The API response with the object
+    """
+    url = f"{BASE_URL}/obp/dynamic-entity/{entity_name}/{object_id}"
+
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    if token:
+        headers["Authorization"] = f"DirectLogin token={token}"
+
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        result = response.json()
+        return result
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error getting object for {entity_name}/{object_id}: {e}")
+        if hasattr(e.response, 'text'):
+            logger.error(f"Response: {e.response.text}")
+        raise
+
+
 def main():
     logger.info("Starting Dummy Data Creation Script")
     print_separator()
@@ -117,6 +151,8 @@ def main():
             
             created_projects.append(project_id)
             logger.info(f"  ✓ [{idx}/{len(projects_data)}] Created project: {project_data['project_owner'][:30]}... (ID: {project_id})")
+            # Debug: Log the full response structure
+            logger.debug(f"Full project response: {response}")
         except Exception as e:
             logger.error(f"  ✗ [{idx}/{len(projects_data)}] Failed to create project: {e}")
 
@@ -125,6 +161,18 @@ def main():
         return
 
     print_separator()
+    
+    # Debug: Log the created project IDs
+    logger.info(f"Created project IDs: {created_projects}")
+    
+    # Verify projects exist by fetching them back
+    logger.info("Verifying created projects exist...")
+    for project_id in created_projects:
+        try:
+            project = get_dynamic_entity_object(ENTITY_PROJECT, project_id, DIRECTLOGIN_TOKEN)
+            logger.info(f"  ✓ Verified project {project_id[:8]}... exists")
+        except Exception as e:
+            logger.error(f"  ✗ Failed to verify project {project_id}: {e}")
 
     # =========================================================================
     # STEP 2: Create Parcels
@@ -132,29 +180,32 @@ def main():
     logger.info("STEP 2: Creating Parcels")
     print_separator("-")
 
+    # Use the proper foreign key field name that matches the referenced entity's ID field
+    project_id_field = f"{ENTITY_PROJECT}_id"
+    
     parcels_data = [
         {
-            "project_id": created_projects[0],
+            project_id_field: created_projects[0],
             "parcel_owner": "John Smith - Passport: US123456789",
             "geo_data": '{"type":"Polygon","coordinates":[[[-122.4,37.8],[-122.4,37.7],[-122.3,37.7],[-122.3,37.8],[-122.4,37.8]]]}'
         },
         {
-            "project_id": created_projects[0],
+            project_id_field: created_projects[0],
             "parcel_owner": "John Smith - Passport: US123456789",
             "geo_data": '{"type":"Polygon","coordinates":[[[-122.3,37.8],[-122.3,37.7],[-122.2,37.7],[-122.2,37.8],[-122.3,37.8]]]}'
         },
         {
-            "project_id": created_projects[1],
+            project_id_field: created_projects[1],
             "parcel_owner": "Maria Garcia - Passport: ES987654321",
             "geo_data": '{"type":"Polygon","coordinates":[[[-3.7,40.4],[-3.7,40.3],[-3.6,40.3],[-3.6,40.4],[-3.7,40.4]]]}'
         },
         {
-            "project_id": created_projects[1],
+            project_id_field: created_projects[1],
             "parcel_owner": "Maria Garcia - Passport: ES987654321",
             "geo_data": '{"type":"Polygon","coordinates":[[[-3.6,40.4],[-3.6,40.3],[-3.5,40.3],[-3.5,40.4],[-3.6,40.4]]]}'
         },
         {
-            "project_id": created_projects[2],
+            project_id_field: created_projects[2],
             "parcel_owner": "Wei Chen - Passport: CN456789123",
             "geo_data": '{"type":"Polygon","coordinates":[[[116.4,39.9],[116.4,39.8],[116.5,39.8],[116.5,39.9],[116.4,39.9]]]}'
         }
@@ -179,11 +230,12 @@ def main():
                 logger.error(f"Could not find {response_key} in response. Available keys: {list(response.keys())}")
                 raise KeyError(f"Could not find {response_key} in response")
             
+            # Store parcel ID and project_id for later use
             created_parcels.append({
                 "parcel_id": parcel_id,
-                "project_id": parcel_data["project_id"]
+                "project_id": parcel_data[project_id_field]
             })
-            logger.info(f"  ✓ [{idx}/{len(parcels_data)}] Created parcel for project {parcel_data['project_id'][:8]}... (ID: {parcel_id})")
+            logger.info(f"  ✓ [{idx}/{len(parcels_data)}] Created parcel for project {parcel_data[project_id_field][:8]}... (ID: {parcel_id})")
         except Exception as e:
             logger.error(f"  ✗ [{idx}/{len(parcels_data)}] Failed to create parcel: {e}")
 
@@ -200,8 +252,9 @@ def main():
     print_separator("-")
 
     for idx, parcel in enumerate(created_parcels, 1):
+        parcel_id_field = f"{ENTITY_PARCEL}_id"
         verification_data = {
-            "parcel_id": parcel["parcel_id"],
+            parcel_id_field: parcel["parcel_id"],
             "status_code": "verified" if idx % 3 != 0 else "in_progress",
             "status_message": "Ownership verified successfully" if idx % 3 != 0 else "Verification pending cadastre response",
             "authority": "National Land Registry"
@@ -230,8 +283,9 @@ def main():
     print_separator("-")
 
     for idx, project_id in enumerate(created_projects, 1):
+        project_id_field = f"{ENTITY_PROJECT}_id"
         verification_data = {
-            "project_id": project_id,
+            project_id_field: project_id,
             "status_code": "verified" if idx % 2 == 0 else "in_progress",
             "status_message": "Project methodology verified" if idx % 2 == 0 else "Awaiting documentation review"
         }
@@ -259,9 +313,11 @@ def main():
     print_separator("-")
 
     for idx, parcel in enumerate(created_parcels, 1):
+        parcel_id_field = f"{ENTITY_PARCEL}_id"
+        project_id_field = f"{ENTITY_PROJECT}_id"
         verification_data = {
-            "parcel_id": parcel["parcel_id"],
-            "project_id": parcel["project_id"],
+            parcel_id_field: parcel["parcel_id"],
+            project_id_field: parcel["project_id"],
             "status_code": "verified" if idx % 4 != 0 else "failed",
             "status_message": "Baseline carbon estimation completed" if idx % 4 != 0 else "Insufficient historical data",
             "amount": 150 + (idx * 50) if idx % 4 != 0 else 0
@@ -290,9 +346,11 @@ def main():
     print_separator("-")
 
     for idx, parcel in enumerate(created_parcels, 1):
+        parcel_id_field = f"{ENTITY_PARCEL}_id"
+        project_id_field = f"{ENTITY_PROJECT}_id"
         verification_data = {
-            "parcel_id": parcel["parcel_id"],
-            "project_id": parcel["project_id"],
+            parcel_id_field: parcel["parcel_id"],
+            project_id_field: parcel["project_id"],
             "status_code": "verified" if idx % 3 != 0 else "in_progress",
             "status_message": "Monitoring period Q1-2024 verified" if idx % 3 != 0 else "Awaiting satellite data analysis",
             "amount": 80 + (idx * 30) if idx % 3 != 0 else 0
@@ -321,8 +379,9 @@ def main():
     print_separator("-")
 
     for idx, project_id in enumerate(created_projects, 1):
+        project_id_field = f"{ENTITY_PROJECT}_id"
         verification_data = {
-            "project_id": project_id,
+            project_id_field: project_id,
             "status_code": "verified" if idx % 2 == 1 else "in_progress",
             "status_message": "Q1-2024 project period verified" if idx % 2 == 1 else "Pending final aggregation review"
         }

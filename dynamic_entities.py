@@ -101,14 +101,14 @@ parcel_entity = {
 	ENTITY_PARCEL: {
 				"description": "a piece of land",
 				"required": [
-					"project_id",
+					f"{ENTITY_PROJECT}_id",
 					"parcel_owner",
 					"geo_data"
 				],
 				"properties": {
-					"project_id": {
-						"type": "string",
-						"example": "1234567",
+					f"{ENTITY_PROJECT}_id": {
+						"type": f"reference:{ENTITY_PROJECT}",
+						"example": "a8770fca-3d1d-47af-b6d0-7a6c3f124388",
 						"description": "ID of the project this parcel belongs to"
 					},
 					"parcel_owner": {
@@ -130,11 +130,11 @@ parcel_ownership_verification_entity = {
 	ENTITY_PARCEL_OWNERSHIP_VERIFICATION: {
 				"description": "Verification of Landownership",
 				"required": [
-					"parcel_id"
+					f"{ENTITY_PARCEL}_id"
 				],
 				"properties": {
-					"parcel_id": {
-						"type": "string",
+					f"{ENTITY_PARCEL}_id": {
+						"type": f"reference:{ENTITY_PARCEL}",
 						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 						"description": "(uu)id of the parcel that gets verified"
 					},
@@ -162,19 +162,19 @@ parcel_verification_entity = {
 	ENTITY_PROJECT_PARCEL_VERIFICATION: {
 		"description": "Verification of Project Claim Estimation",
 		"required": [
-			"parcel_id",
-			"project_id"
+			f"{ENTITY_PARCEL}_id",
+			f"{ENTITY_PROJECT}_id"
 		],
 		"properties": {
-			"parcel_id": {
-				"type": "string",
+			f"{ENTITY_PARCEL}_id": {
+				"type": f"reference:{ENTITY_PARCEL}",
 				"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 				"description": "(uu)id of the parcel that gets verified"
 			},
-			"project_id": {
-						"type": "string",
-						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
-						"description": "ID of the project this parcel belongs to"
+			f"{ENTITY_PROJECT}_id": {
+					"type": f"reference:{ENTITY_PROJECT}",
+					"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
+					"description": "ID of the project this parcel belongs to"
 			},
 			"status_code": {
 				"type": "string",
@@ -199,11 +199,11 @@ project_verification_entity = {
 	ENTITY_PROJECT_VERIFICATION: {
 		"description": "Verification of Project",
 		"required": [
-			"project_id"
+			f"{ENTITY_PROJECT}_id"
 		],
 		"properties": {
-			"project_id": {
-						"type": "string",
+			f"{ENTITY_PROJECT}_id": {
+						"type": f"reference:{ENTITY_PROJECT}",
 						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 						"description": "ID of the project verified"
 			},
@@ -225,19 +225,19 @@ parcel_monitoring_period_verification = {
 	ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION: {
 		"description": "Verification of Project Claim",
 		"required": [
-			"parcel_id",
-			"project_id"
+			f"{ENTITY_PARCEL}_id",
+			f"{ENTITY_PROJECT}_id"
 		],
 		"properties": {
-			"parcel_id": {
-				"type": "string",
+			f"{ENTITY_PARCEL}_id": {
+				"type": f"reference:{ENTITY_PARCEL}",
 				"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 				"description": "(uu)id of the parcel that gets verified"
 			},
-			"project_id": {
-						"type": "string",
-						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
-						"description": "ID of the project this parcel belongs to"
+			f"{ENTITY_PROJECT}_id": {
+				"type": f"reference:{ENTITY_PROJECT}",
+				"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
+				"description": "ID of the project this parcel belongs to"
 			},
 			"status_code": {
 				"type": "string",
@@ -262,11 +262,11 @@ project_monitoring_period_verification = {
 	ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION: {
 		"description": "Verification of Project",
 		"required": [
-			"project_id"
+			f"{ENTITY_PROJECT}_id"
 		],
 		"properties": {
-			"project_id": {
-						"type": "string",
+			f"{ENTITY_PROJECT}_id": {
+						"type": f"reference:{ENTITY_PROJECT}",
 						"example": "3dece208-c95c-11f0-9041-54e1adfac5b1",
 						"description": "ID of the project verified"
 			},
