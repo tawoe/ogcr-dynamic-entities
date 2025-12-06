@@ -1,5 +1,6 @@
 import logging
 import random
+import requests
 from dotenv import load_dotenv
 from obp_client import token, obp_host
 from dynamic_entities import (
