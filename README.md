@@ -29,3 +29,5 @@ OBP_CONSUMER_KEY=35tkq0yksx0lw1sn53kd2jbwonfumgjwssg2jf3g
 OBP_LOG_LEVEL=INFO
 ```
 
+
+The OGCR Project has received funding from the European Union's Horizon Europe programme under grant agreement 101218854.
