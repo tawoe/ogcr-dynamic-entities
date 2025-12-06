@@ -1,8 +1,7 @@
 import logging
-import requests
-from obp_client import token, obp_host
+import random
 from dotenv import load_dotenv
-import os
+from obp_client import token, obp_host
 from dynamic_entities import (
     ENTITY_PROJECT,
     ENTITY_PARCEL,
@@ -10,7 +9,9 @@ from dynamic_entities import (
     ENTITY_PROJECT_PARCEL_VERIFICATION,
     ENTITY_PROJECT_VERIFICATION,
     ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION,
-    ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION
+    ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION,
+    get_response_key,
+    get_id_key
 )
 
 # Configure logging with better formatting
@@ -25,7 +26,6 @@ logger = logging.getLogger(__name__)
 BASE_URL = obp_host
 DIRECTLOGIN_TOKEN = token
 load_dotenv()
-PREFIX = os.getenv('OBP_ENTITY_PREFIX', '')
 
 
 def print_separator(char="=", length=80):
@@ -101,11 +101,11 @@ def main():
             )
             # The response contains a nested object with key like 'ogcr2_project'
             # Inside that object is the ID with key like 'ogcr2project_id'
-            response_key = f"{PREFIX.lower()}_project"
+            response_key = get_response_key(ENTITY_PROJECT)
             if response_key in response:
                 project_obj = response[response_key]
                 # The ID key inside is prefix_entityname_id (with underscores)
-                id_key = f"{PREFIX.lower()}_project_id"
+                id_key = get_id_key(ENTITY_PROJECT)
                 project_id = project_obj.get(id_key)
                 if not project_id:
                     logger.error(f"Could not find {id_key} in nested object. Available keys: {list(project_obj.keys())}")
@@ -166,10 +166,10 @@ def main():
                 parcel_data,
                 DIRECTLOGIN_TOKEN
             )
-            response_key = f"{PREFIX.lower()}_parcel"
+            response_key = get_response_key(ENTITY_PARCEL)
             if response_key in response:
                 parcel_obj = response[response_key]
-                id_key = f"{PREFIX.lower()}_parcel_id"
+                id_key = get_id_key(ENTITY_PARCEL)
                 parcel_id = parcel_obj.get(id_key)
                 if not parcel_id:
                     logger.error(f"Could not find {id_key} in nested object. Available keys: {list(parcel_obj.keys())}")
@@ -212,9 +212,9 @@ def main():
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )
-            response_key = f"{PREFIX.lower()}_parcel_own_verify"
+            response_key = get_response_key(ENTITY_PARCEL_OWNERSHIP_VERIFICATION)
             verification_obj = response.get(response_key, {})
-            id_key = f"{PREFIX.lower()}_parcel_own_verify_id"
+            id_key = get_id_key(ENTITY_PARCEL_OWNERSHIP_VERIFICATION)
             verification_id = verification_obj.get(id_key)
             logger.info(f"  ✓ [{idx}/{len(created_parcels)}] Created ownership verification for parcel {parcel['parcel_id'][:8]}... (Status: {verification_data['status_code']})")
         except Exception as e:
@@ -241,9 +241,9 @@ def main():
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )
-            response_key = f"{PREFIX.lower()}_proj_verify"
+            response_key = get_response_key(ENTITY_PROJECT_VERIFICATION)
             verification_obj = response.get(response_key, {})
-            id_key = f"{PREFIX.lower()}_proj_verify_id"
+            id_key = get_id_key(ENTITY_PROJECT_VERIFICATION)
             verification_id = verification_obj.get(id_key)
             logger.info(f"  ✓ [{idx}/{len(created_projects)}] Created project verification for {project_id[:8]}... (Status: {verification_data['status_code']})")
         except Exception as e:
@@ -272,9 +272,9 @@ def main():
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )
-            response_key = f"{PREFIX.lower()}_proj_parcel_verify"
+            response_key = get_response_key(ENTITY_PROJECT_PARCEL_VERIFICATION)
             verification_obj = response.get(response_key, {})
-            id_key = f"{PREFIX.lower()}_proj_parcel_verify_id"
+            id_key = get_id_key(ENTITY_PROJECT_PARCEL_VERIFICATION)
             verification_id = verification_obj.get(id_key)
             logger.info(f"  ✓ [{idx}/{len(created_parcels)}] Created project-parcel verification (Amount: {verification_data['amount']} tons CO2)")
         except Exception as e:
@@ -303,9 +303,9 @@ def main():
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )
-            response_key = f"{PREFIX.lower()}_parcel_mon_per_verify"
+            response_key = get_response_key(ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION)
             verification_obj = response.get(response_key, {})
-            id_key = f"{PREFIX.lower()}_parcel_mon_per_verify_id"
+            id_key = get_id_key(ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION)
             verification_id = verification_obj.get(id_key)
             logger.info(f"  ✓ [{idx}/{len(created_parcels)}] Created parcel monitoring verification (Amount: {verification_data['amount']} tons CO2)")
         except Exception as e:
@@ -332,9 +332,9 @@ def main():
                 verification_data,
                 DIRECTLOGIN_TOKEN
             )
-            response_key = f"{PREFIX.lower()}_proj_per_verify"
+            response_key = get_response_key(ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION)
             verification_obj = response.get(response_key, {})
-            id_key = f"{PREFIX.lower()}_proj_per_verify_id"
+            id_key = get_id_key(ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION)
             verification_id = verification_obj.get(id_key)
             logger.info(f"  ✓ [{idx}/{len(created_projects)}] Created project period verification for {project_id[:8]}... (Status: {verification_data['status_code']})")
         except Exception as e:

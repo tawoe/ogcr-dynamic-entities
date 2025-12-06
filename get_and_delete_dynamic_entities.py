@@ -49,7 +49,7 @@ def get_all_objects_for_system_dynamic_entity(entity_name, token=None):
 		token (str, optional): DirectLogin authentication token
 
 	Returns:
-		dict: The API response
+		dict: The API response, or None if entity doesn't exist (404)
 	"""
 	url = f"{BASE_URL}/obp/dynamic-entity/{entity_name}"
 
@@ -65,10 +65,18 @@ def get_all_objects_for_system_dynamic_entity(entity_name, token=None):
 		response = requests.get(url, headers=headers)
 		response.raise_for_status()
 		return response.json()
-	except requests.exceptions.RequestException as e:
+	except requests.exceptions.HTTPError as e:
+		# 404 means entity doesn't exist yet - this is fine
+		if e.response.status_code == 404:
+			logger.info(f"Entity {entity_name} does not exist (404) - skipping")
+			return None
+		# For other HTTP errors, log and raise
 		logger.error(f"Error getting system dynamic entity: {e}")
 		if hasattr(e.response, 'text'):
 			logger.error(f"Response: {e.response.text}")
+		raise
+	except requests.exceptions.RequestException as e:
+		logger.error(f"Error getting system dynamic entity: {e}")
 		raise
 
 def delete_object_for_system_dynamic_entity(entity_name, object_id, token=None):

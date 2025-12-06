@@ -22,6 +22,28 @@ ENTITY_PROJECT_VERIFICATION = f"{PREFIX}_project_verification"
 ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION = f"{PREFIX}_parcel_monitoring_period_verification"
 ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION = f"{PREFIX}_project_monitoring_period_verification"
 
+# Helper functions to get response keys and ID keys from entity constants
+def get_response_key(entity_constant):
+	"""
+	Get the response key from an entity constant.
+	E.g., 'ogcr3_project' -> 'ogcr3_project'
+	"""
+	return entity_constant.lower()
+
+def get_id_key(entity_constant):
+	"""
+	Get the ID key from an entity constant.
+	E.g., 'ogcr3_project' -> 'ogcr3_project_id'
+	"""
+	return f"{entity_constant.lower()}_id"
+
+def get_list_key(entity_constant):
+	"""
+	Get the list key from an entity constant.
+	E.g., 'ogcr3_project' -> 'ogcr3_project_list'
+	"""
+	return f"{entity_constant.lower()}_list"
+
 def create_system_dynamic_entity(entity_definition, token=None):
 	"""
 	Create a system-level dynamic entity in OBP.
@@ -264,27 +286,26 @@ project_monitoring_period_verification = {
 
 def create_all_entities():
 	entities_data = [
-		("Project", project_entity),
-		("Parcel", parcel_entity),
-		("Parcel_Own_Verify", parcel_ownership_verification_entity),
-		("Proj_Parcel_Verify", parcel_verification_entity),
-		("Proj_Verify", project_verification_entity),
-		("Parcel_Mon_Per_Verify", parcel_monitoring_period_verification),
-		("Proj_Per_Verify", project_monitoring_period_verification)
+		(ENTITY_PROJECT, project_entity),
+		(ENTITY_PARCEL, parcel_entity),
+		(ENTITY_PARCEL_OWNERSHIP_VERIFICATION, parcel_ownership_verification_entity),
+		(ENTITY_PROJECT_PARCEL_VERIFICATION, parcel_verification_entity),
+		(ENTITY_PROJECT_VERIFICATION, project_verification_entity),
+		(ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION, parcel_monitoring_period_verification),
+		(ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION, project_monitoring_period_verification)
 	]
 
 	created_count = 0
 	failed_count = 0
 
-	for idx, (name, entity) in enumerate(entities_data, 1):
-		full_name = f"{PREFIX}{name}"
+	for idx, (entity_name, entity) in enumerate(entities_data, 1):
 		try:
 			response = create_system_dynamic_entity(entity, DIRECTLOGIN_TOKEN)
 			entity_id = response.get('dynamicEntityId', 'N/A')
-			logger.info(f"  ✓ [{idx}/{len(entities_data)}] Created entity: {full_name} (ID: {entity_id})")
+			logger.info(f"  ✓ [{idx}/{len(entities_data)}] Created entity: {entity_name} (ID: {entity_id})")
 			created_count += 1
 		except Exception as e:
-			logger.error(f"  ✗ [{idx}/{len(entities_data)}] Failed to create entity {full_name}")
+			logger.error(f"  ✗ [{idx}/{len(entities_data)}] Failed to create entity {entity_name}")
 			logger.error(f"      Error details: {e}")
 			# The detailed request is already logged by create_system_dynamic_entity()
 			failed_count += 1

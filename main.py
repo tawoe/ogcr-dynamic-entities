@@ -1,6 +1,4 @@
-import requests
 import logging
-from datetime import datetime
 from obp_client import token, obp_host
 
 
@@ -11,7 +9,6 @@ from get_and_delete_dynamic_entities import (
 	delete_system_dynamic_entity)
 from dynamic_entities import (
 	create_all_entities,
-	PREFIX,
 	ENTITY_PROJECT,
 	ENTITY_PARCEL,
 	ENTITY_PARCEL_OWNERSHIP_VERIFICATION,
@@ -67,6 +64,12 @@ def main():
 		
 		try:
 			response = get_all_objects_for_system_dynamic_entity(name, token=DIRECTLOGIN_TOKEN)
+			
+			# If response is None, entity doesn't exist (404) - skip it
+			if response is None:
+				logger.info(f"  → Entity {name} does not exist yet - skipping")
+				continue
+			
 			# Handle case where the list key might not exist (no objects)
 			objects = response.get(f"{name.lower()}_list", [])
 			

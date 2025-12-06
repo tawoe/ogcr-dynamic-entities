@@ -2,14 +2,14 @@ import logging
 from obp_client import token, obp_host
 from get_and_delete_dynamic_entities import get_all_objects_for_system_dynamic_entity
 from dynamic_entities import (
-    PREFIX,
     ENTITY_PROJECT,
     ENTITY_PARCEL,
     ENTITY_PARCEL_OWNERSHIP_VERIFICATION,
     ENTITY_PROJECT_PARCEL_VERIFICATION,
     ENTITY_PROJECT_VERIFICATION,
     ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION,
-    ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION
+    ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION,
+    get_list_key
 )
 import json
 
@@ -83,12 +83,16 @@ def main():
                 token=DIRECTLOGIN_TOKEN
             )
             
+            # If response is None, entity doesn't exist (404) - skip it
+            if response is None:
+                logger.info(f"  → Entity {entity_name} does not exist yet - skipping")
+                all_data[entity_name] = []
+                continue
+            
             # Handle case where the list key might not exist (no objects)
             # The key format is: prefix_entityname_list (with underscores between each part)
-            # e.g., "ogcr2_project_list" for OGCR2Project
-            # Convert "OGCR2Project" to "ogcr2_project_list"
-            entity_without_prefix = entity_name[len(PREFIX):]  # e.g., "Project"
-            list_key = f"{PREFIX.lower()}_{entity_without_prefix.lower()}_list"
+            # e.g., "ogcr3_project_list" for ogcr3_project
+            list_key = get_list_key(entity_name)
             objects = response.get(list_key, [])
             
             if not objects:
