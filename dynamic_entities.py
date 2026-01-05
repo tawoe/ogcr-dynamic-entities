@@ -12,15 +12,17 @@ BASE_URL = obp_host  # Replace with your OBP instance URL
 DIRECTLOGIN_TOKEN = token  # Optional: Replace with your DirectLogin token
 load_dotenv()
 PREFIX = os.getenv('OBP_ENTITY_PREFIX', '').lower()
-
+if PREFIX != '':
+	if not PREFIX.endswith("_"):
+		PREFIX = PREFIX + "_"
 # Entity name constants
-ENTITY_PROJECT = f"{PREFIX}_project"
-ENTITY_PARCEL = f"{PREFIX}_parcel"
-ENTITY_PARCEL_OWNERSHIP_VERIFICATION = f"{PREFIX}_parcel_owner_verification"
-ENTITY_PROJECT_PARCEL_VERIFICATION = f"{PREFIX}_project_parcel_verification"
-ENTITY_PROJECT_VERIFICATION = f"{PREFIX}_project_verification"
-ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION = f"{PREFIX}_parcel_monitoring_period_verification"
-ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION = f"{PREFIX}_project_monitoring_period_verification"
+ENTITY_PROJECT = f"{PREFIX}project"
+ENTITY_PARCEL = f"{PREFIX}parcel"
+ENTITY_PARCEL_OWNERSHIP_VERIFICATION = f"{PREFIX}parcel_owner_verification"
+ENTITY_PROJECT_PARCEL_VERIFICATION = f"{PREFIX}project_parcel_verification"
+ENTITY_PROJECT_VERIFICATION = f"{PREFIX}project_verification"
+ENTITY_PARCEL_MONITORING_PERIOD_VERIFICATION = f"{PREFIX}parcel_monitoring_period_verification"
+ENTITY_PROJECT_MONITORING_PERIOD_VERIFICATION = f"{PREFIX}project_monitoring_period_verification"
 
 # Helper functions to get response keys and ID keys from entity constants
 def get_response_key(entity_constant):
